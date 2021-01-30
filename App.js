@@ -1,21 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { UserProvider, useUser } from "./contexts/UserContext";
+import { useFonts } from "expo-font";
+import { Ionicons } from "@expo/vector-icons";
+import AppNavigation from "./screens/AppNavigation";
+import Login from "./screens/Login";
 
 export default function App() {
+  const [loaded] = useFonts({
+    Roboto: require("native-base/Fonts/Roboto.ttf"),
+    Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+    ...Ionicons.font,
+  });
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <UserProvider>
+        <StartApp />
+      </UserProvider>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+function StartApp() {
+  const { user } = useUser();
+
+  return user ? <AppNavigation /> : <Login />;
+}
