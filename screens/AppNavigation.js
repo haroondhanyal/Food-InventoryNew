@@ -5,7 +5,11 @@ import {
   DrawerItem,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { useUser } from "../contexts/UserContext";
 import SalesManagerDashboard from "./SalesManagerDashboard";
 import SalesPersonDashboard from "./SalesPersonDashboard";
@@ -15,6 +19,7 @@ import AddStock from "./AddStock";
 import SaleReport from "./SaleReport";
 import StockReport from "./StockReport";
 import PointOfSale from "./PointOfSale";
+import ShowStock from "./ShowStock";
 
 const Drawer = createDrawerNavigator();
 
@@ -31,7 +36,7 @@ export default function () {
         <DrawerContentScrollView {...props}>
           <DrawerItemList {...props} />
           <DrawerItem
-            icon={(props) => <AntDesign {...props} name="logout" />}
+            icon={(props) => <MaterialIcons {...props} name="logout" />}
             label="Logout"
             onPress={logout}
           />
@@ -51,9 +56,11 @@ export default function () {
           />
           <Drawer.Screen
             options={{
-              drawerIcon: (props) => <MaterialIcons {...props} name="add" />,
+              drawerIcon: (props) => (
+                <MaterialIcons {...props} name="people-alt" />
+              ),
             }}
-            name="Show Item"
+            name="Daily Record"
             component={PointOfSale}
           />
           <Drawer.Screen
@@ -72,10 +79,12 @@ export default function () {
           />
           <Drawer.Screen
             options={{
-              drawerIcon: (props) => <MaterialIcons {...props} name="cart" />,
+              drawerIcon: (props) => (
+                <MaterialIcons {...props} name="add-shopping-cart" />
+              ),
             }}
             name="Show Stock"
-            component={PointOfSale}
+            component={ShowStock}
           />
           <Drawer.Screen
             options={{
@@ -84,9 +93,25 @@ export default function () {
             name="Add Stock"
             component={AddStock}
           />
-          <Drawer.Screen name="Sale Report" component={SaleReport} />
+          <Drawer.Screen
+            options={{
+              drawerIcon: (props) => (
+                <FontAwesome {...props} name="bar-chart" />
+              ),
+            }}
+            name="Sale Report"
+            component={SaleReport}
+          />
 
-          <Drawer.Screen name="Stock Report" component={StockReport} />
+          <Drawer.Screen
+            options={{
+              drawerIcon: (props) => (
+                <MaterialCommunityIcons {...props} name="chart-bar" />
+              ),
+            }}
+            name="Stock Report"
+            component={StockReport}
+          />
         </>
       ) : (
         <>

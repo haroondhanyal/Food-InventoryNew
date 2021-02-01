@@ -79,20 +79,20 @@ export default function AddStock() {
           <Text style={styles.qty}>Quantity</Text>
         </View>
         <Button
-          style={{ width: 50 }}
+          style={{ width: 70 }}
           title="-"
           onPress={() => setQuantity(Math.abs(quantity - 1))}
         />
         <Text>{quantity}</Text>
         <Button
-          style={{ width: 50 }}
+          style={{ width: 70 }}
           title="+"
           onPress={() => setQuantity(quantity + 1)}
         />
       </View>
 
       <View style={styles.button}>
-        <Button color="cornflowerblue" alignSelf="center" title="Save" />
+        <Button title="Save" />
       </View>
     </View>
   );
@@ -115,24 +115,20 @@ const styles = StyleSheet.create({
   },
   input: {
     padding: 5,
-    borderBottomWidth: 1,
+    borderBottomWidth: 1.5,
     borderColor: "black",
     marginBottom: 10,
     width: "100%",
   },
   qty: {
-    padding: 5,
+    padding: 6,
     fontSize: 18,
   },
   button: {
     width: 200,
-    alignSelf: "center",
+    alignSelf: "flex-end",
     marginTop: 30,
   },
-  image: {
-    width: 250,
-    height: 250,
-    alignSelf: "center",
-  },
+
   no: { width: "50%", padding: 5, textAlign: "center" },
 });

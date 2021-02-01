@@ -34,6 +34,7 @@ export default function SalesManagerDashboard({ navigation }) {
             style={styles.image}
             source={require("../assets/report.jpg")}
           />
+
           <Text>Sales Report</Text>
         </TouchableOpacity>
         <TouchableOpacity
