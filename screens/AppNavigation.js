@@ -13,7 +13,6 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
 import { useUser } from '../contexts/UserContext'
 import SalesManagerDashboard from './SalesManagerDashboard'
 import DailyRecord from './DailyRecord'
@@ -60,7 +59,6 @@ function SalesPersonStack() {
 }
 
 export default function () {
-  const { navigate } = useNavigation()
   const { user, setUser } = useUser()
 
   function logout() {
@@ -100,7 +98,7 @@ export default function () {
               ),
             }}
             name="Sales Manager Dashboard"
-            component={SalesManagerStack}
+            component={SalesManagerDashboard}
           />
           <Drawer.Screen
             options={{
@@ -170,7 +168,7 @@ export default function () {
               ),
             }}
             name="Sales Person Dashboard"
-            component={SalesPersonStack}
+            component={SalesPersonDashboard}
           />
           <Drawer.Screen
             options={{
