@@ -12,7 +12,6 @@ import {
   FontAwesome,
   MaterialCommunityIcons,
   MaterialIcons,
-<<<<<<< HEAD
 } from "@expo/vector-icons";
 import { useUser } from "../contexts/UserContext";
 import SalesManagerDashboard from "./SalesManagerDashboard";
@@ -25,20 +24,6 @@ import SaleReport from "./SaleReport";
 import StockReport from "./StockReport";
 import SalesPersonDashboard from "./SalesPersonDashboard";
 import PointOfSale from "./PointOfSale";
-=======
-} from '@expo/vector-icons'
-import { useUser } from '../contexts/UserContext'
-import SalesManagerDashboard from './SalesManagerDashboard'
-import DailyRecord from './DailyRecord'
-import AddItem from './AddItem'
-import EditItem from './EditItem'
-import ShowStock from './ShowStock'
-import AddStock from './AddStock'
-import SaleReport from './SaleReport'
-import StockReport from './StockReport'
-import SalesPersonDashboard from './SalesPersonDashboard'
-import PointOfSale from './PointOfSale'
->>>>>>> 16142ba07fc4e1ba958f01aca4eedf8cb45c7403
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -74,11 +59,7 @@ function SalesPersonStack() {
 }
 
 export default function () {
-<<<<<<< HEAD
   const { user, setUser } = useUser();
-=======
-  const { user, setUser } = useUser()
->>>>>>> 16142ba07fc4e1ba958f01aca4eedf8cb45c7403
 
   function logout() {
     setUser(null);

@@ -13,7 +13,17 @@ export default function SalesManagerDashboard({ navigation }) {
           </Button>
         </Item>
       </Form>
-      <View style={styles.centered}>
+      <View style={styles.row}>
+        <TouchableOpacity
+          style={styles.block}
+          onPress={() => navigation.navigate("Add Item")}
+        >
+          <Image
+            style={styles.image}
+            source={require("../assets/addstock.png")}
+          />
+          <Text>Add Item</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.block}
           onPress={() => navigation.navigate("Add Stock")}

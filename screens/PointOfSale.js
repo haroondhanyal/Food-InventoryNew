@@ -1,132 +1,201 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
+import { Alert, StyleSheet, FlatList } from 'react-native'
 import {
-  Text,
-  TextInput,
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
+  Container,
+  Form,
+  Item,
+  Input,
   Button,
-  FlatList,
-} from "react-native";
-import { API_URL } from "../constants";
+  Text,
+  InputGroup,
+  Icon,
+  Card,
+  CardItem,
+  Right,
+  Left,
+} from 'native-base'
+import { API_URL } from '../constants'
+import { useUser } from '../contexts/UserContext'
 
 export default function PointOfSale({ navigation }) {
-  const [itemNo, setItemNo] = useState("");
-  const [items, setItems] = useState([]);
+  const { user } = useUser()
+  const [itemNo, setItemNo] = useState('')
+  const [items, setItems] = useState([])
 
-  function searchItem() {
-    fetch(API_URL + `/items/searchitem?ItemNo=${itemNo}`)
-      .then((response) => {
-        if (response.status === 404) {
-          response.json().then(function (err) {
-            alert(err.Message);
-          });
-        } else if (response.status === 200) {
-          response.json().then(function (item) {
-            setItems(items.concat([...item]));
-          });
-        }
-      })
-      .catch((err) => alert(err.name, err.message));
+  const [itemSales, setItemSales] = useState(new Map())
+
+  function setQuantity(itemNo, price = 0, quantity = 0) {
+    setItemSales(
+      new Map(
+        itemSales.set(itemNo, {
+          quantity,
+          total: quantity * price,
+        })
+      )
+    )
   }
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Point Of Sale</Text>
+  function increaseQuantity(itemNo, price) {
+    const quantity = parseInt(itemSales.get(itemNo).quantity) + 1
+    setItemSales(
+      new Map(
+        itemSales.set(itemNo, {
+          quantity,
+          total: quantity * price,
+        })
+      )
+    )
+  }
 
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: 20,
-        }}
-      >
-        <TextInput
-          style={{
-            paddingHorizontal: 10,
-            borderWidth: 1,
-            width: "80%",
-          }}
-          placeholder="Search Item by Item No"
-          value={itemNo}
-          onChangeText={setItemNo}
-        />
-        <View style={{ padding: 5 }}>
-          <Button title="Search" onPress={searchItem} />
-        </View>
-      </View>
+  function decreaseQuantity(itemNo, price) {
+    const quantity = parseInt(itemSales.get(itemNo).quantity) - 1
+    setItemSales(
+      new Map(
+        itemSales.set(itemNo, {
+          quantity,
+          total: quantity * price,
+        })
+      )
+    )
+  }
+
+  function cancelSale() {
+    setItems([])
+    setItemSales(new Map())
+  }
+
+  function searchItem() {
+    fetch(API_URL + '/items/searchitem?itemno=' + itemNo, {
+      method: 'GET',
+    })
+      .then((res) => res.json())
+      .then(([item]) => {
+        console.log(item)
+        itemSales.set(item.Item_No, { quantity: '0', total: '0' })
+        setItems(items.concat([item]))
+      })
+      .catch((err) => {
+        Alert.alert('Item not found. Plase goto Add Item to add new item.')
+      })
+  }
+
+  let total = 0
+
+  itemSales.forEach((v) => {
+    total += v.total
+  })
+
+  return (
+    <Container style={styles.container}>
+      <Text style={{ marginBottom: 10 }}>{user.username}</Text>
+      <Button style={styles.input} full info onPress={() => {}}>
+        <Text>Frequently Used Items</Text>
+      </Button>
+      <Form>
+        <Item style={styles.input} regular>
+          <InputGroup>
+            <Icon name="ios-search" />
+            <Input
+              placeholder="Search Item No"
+              value={itemNo}
+              onChangeText={setItemNo}
+            />
+            <Button transparent onPress={searchItem}>
+              <Text>Search</Text>
+            </Button>
+            <Button success onPress={() => {}}>
+              <Text>Scan</Text>
+            </Button>
+          </InputGroup>
+        </Item>
+      </Form>
 
       <FlatList
         data={items}
-        keyExtractor={(item, index) => index}
-        ListHeaderComponent={(props) => (
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 20,
-              borderBottomWidth: 1,
-              paddingBottom: 10,
-            }}
-          >
-            <Text style={{ fontWeight: "bold" }}>Product</Text>
-            <Text style={{ fontWeight: "bold" }}>Quantity</Text>
-            <Text style={{ fontWeight: "bold" }}>Price</Text>
-          </View>
-        )}
-        renderItem={({ item: { Item_Name, Quantity, Retail_Price } }) => (
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text style={{ width: "45%" }}>{Item_Name}</Text>
-            <View style={{ flexDirection: "row", width: "45%" }}>
-              <Button title="-" />
-              <TextInput style={{ borderWidth: 1 }} value={0} />
-              <Button title="+" />
-            </View>
-            <Text style={{ width: "10%" }}>{Retail_Price}</Text>
-          </View>
+        keyExtractor={(_, i) => i.toString()}
+        ListFooterComponent={() => <Text>Net Total: {total}</Text>}
+        renderItem={({ item }, i) => (
+          <Card>
+            <CardItem>
+              <Left>
+                <Text>Item Name</Text>
+              </Left>
+              <Right>
+                <Text>{item.Item_Name}</Text>
+              </Right>
+            </CardItem>
+            <CardItem>
+              <Left>
+                <Text>Item No</Text>
+              </Left>
+              <Right>
+                <Text>{item.Item_No}</Text>
+              </Right>
+            </CardItem>
+            <CardItem>
+              <Left>
+                <Text>Price</Text>
+              </Left>
+              <Right>
+                <Text>{item.Retail_Price}</Text>
+              </Right>
+            </CardItem>
+            <CardItem>
+              <Left>
+                <Text>Quantity</Text>
+              </Left>
+              <Right>
+                <Item style={styles.input} regular>
+                  <Icon
+                    name="remove"
+                    onPress={() =>
+                      decreaseQuantity(item.Item_No, item.Retail_Price)
+                    }
+                  />
+                  <Input
+                    value={itemSales.get(item.Item_No).quantity.toString()}
+                    onChangeText={(quantity) =>
+                      setQuantity(item.Item_No, item.Retail_Price, quantity)
+                    }
+                  />
+                  <Icon
+                    name="add"
+                    onPress={() =>
+                      increaseQuantity(item.Item_No, item.Retail_Price)
+                    }
+                  />
+                </Item>
+              </Right>
+            </CardItem>
+            <CardItem>
+              <Left>
+                <Text>Total</Text>
+              </Left>
+              <Right>
+                <Text>{itemSales.get(item.Item_No).total}</Text>
+              </Right>
+            </CardItem>
+          </Card>
         )}
       />
 
-      {/* ----------- */}
+      <Button style={styles.input} full success>
+        <Text>Pay</Text>
+      </Button>
 
-      {/* ----------- */}
-
-      <TouchableOpacity style={styles.button}>
-        <Button
-          onPress={() => navigation.navigate("Receipt")}
-          color="tomato"
-          title="GOTO  RECEIPT"
-        />
-      </TouchableOpacity>
-    </View>
-  );
+      <Button style={styles.input} full danger onPress={cancelSale}>
+        <Text>Cancel</Text>
+      </Button>
+    </Container>
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     marginTop: 30,
-    padding: 30,
-  },
-  heading: {
-    fontWeight: "bold",
-    fontSize: 24,
-    paddingVertical: 20,
-    color: "tomato",
-    alignSelf: "center",
-  },
-  button: {
-    width: 160,
-    margin: 20,
     padding: 10,
-    alignSelf: "center",
   },
-});
+  input: {
+    marginBottom: 10,
+  },
+})
