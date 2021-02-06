@@ -1,33 +1,32 @@
-import React from 'react'
-import { StyleSheet, View, Text } from 'react-native'
-import { Thumbnail } from 'native-base'
+import React from "react";
+import { StyleSheet, View, Text } from "react-native";
+import { Thumbnail } from "native-base";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
   DrawerItemList,
-} from '@react-navigation/drawer'
-import { createStackNavigator } from '@react-navigation/stack'
+} from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
 import {
   FontAwesome,
   MaterialCommunityIcons,
   MaterialIcons,
-} from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
-import { useUser } from '../contexts/UserContext'
-import SalesManagerDashboard from './SalesManagerDashboard'
-import DailyRecord from './DailyRecord'
-import AddItem from './AddItem'
-import EditItem from './EditItem'
-import ShowStock from './ShowStock'
-import AddStock from './AddStock'
-import SaleReport from './SaleReport'
-import StockReport from './StockReport'
-import SalesPersonDashboard from './SalesPersonDashboard'
-import PointOfSale from './PointOfSale'
+} from "@expo/vector-icons";
+import { useUser } from "../contexts/UserContext";
+import SalesManagerDashboard from "./SalesManagerDashboard";
+import DailyRecord from "./DailyRecord";
+import AddItem from "./AddItem";
+import EditItem from "./EditItem";
+import ShowStock from "./ShowStock";
+import AddStock from "./AddStock";
+import SaleReport from "./SaleReport";
+import StockReport from "./StockReport";
+import SalesPersonDashboard from "./SalesPersonDashboard";
+import PointOfSale from "./PointOfSale";
 
-const Drawer = createDrawerNavigator()
-const Stack = createStackNavigator()
+const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 function SalesManagerStack() {
   return (
@@ -44,7 +43,7 @@ function SalesManagerStack() {
       <Stack.Screen name="Sale Report" component={SaleReport} />
       <Stack.Screen name="Stock Report" component={StockReport} />
     </Stack.Navigator>
-  )
+  );
 }
 
 function SalesPersonStack() {
@@ -56,15 +55,14 @@ function SalesPersonStack() {
       />
       <Stack.Screen name="Point Of Sale" component={PointOfSale} />
     </Stack.Navigator>
-  )
+  );
 }
 
 export default function () {
-  const { navigate } = useNavigation()
-  const { user, setUser } = useUser()
+  const { user, setUser } = useUser();
 
   function logout() {
-    setUser(null)
+    setUser(null);
   }
 
   return (
@@ -73,9 +71,9 @@ export default function () {
         <DrawerContentScrollView {...props}>
           <View style={styles.drawerContent}>
             <View style={styles.userInfoSection}>
-              <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                <Thumbnail source={require('../assets/login.png')} size={50} />
-                <View style={{ marginLeft: 15, flexDirection: 'column' }}>
+              <View style={{ flexDirection: "row", marginTop: 15 }}>
+                <Thumbnail source={require("../assets/login.png")} size={50} />
+                <View style={{ marginLeft: 15, flexDirection: "column" }}>
                   <Text style={styles.title}>{user.username}</Text>
                   <Text style={styles.caption}>{user.role}</Text>
                 </View>
@@ -91,7 +89,7 @@ export default function () {
         </DrawerContentScrollView>
       )}
     >
-      {user.role === 'SalesManager' ? (
+      {user.role === "SalesManager" ? (
         <>
           <Drawer.Screen
             options={{
@@ -100,7 +98,7 @@ export default function () {
               ),
             }}
             name="Sales Manager Dashboard"
-            component={SalesManagerStack}
+            component={SalesManagerDashboard}
           />
           <Drawer.Screen
             options={{
@@ -170,7 +168,7 @@ export default function () {
               ),
             }}
             name="Sales Person Dashboard"
-            component={SalesPersonStack}
+            component={SalesPersonDashboard}
           />
           <Drawer.Screen
             options={{
@@ -182,7 +180,7 @@ export default function () {
         </>
       )}
     </Drawer.Navigator>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -195,10 +193,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     marginTop: 3,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   caption: {
     fontSize: 14,
     lineHeight: 14,
   },
-})
+});

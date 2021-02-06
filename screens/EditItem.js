@@ -1,14 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, TextInput, View, Image, StyleSheet, Button } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { API_URL } from "../constants";
+import { Value } from "react-native-reanimated";
 
 export default function EditItem() {
+  function SaveItem() {
+    fetch(API_URL + "/Items/AddItem", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        Item_No: ItemCode,
+        Item_Name: ItemName,
+        Category: selectedValue,
+        Brand: Brand,
+        Retail_Price: RetailPrice,
+        Cost_Price: CostPrice,
+        Threshhold_Quantity: THreshHold,
+        Quantity: Quantity,
+      }),
+    });
+  }
+  function UpdateItem() {
+    fetch(API_URL + "/Items/ModifyItem", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        Item_No: ItemCode,
+        Item_Name: ItemName,
+        Category: selectedValue,
+        Brand: Brand,
+        Retail_Price: RetailPrice,
+        Cost_Price: CostPrice,
+        Threshhold_Quantity: THreshHold,
+        Quantity: Quantity,
+      }),
+    });
+  }
+
+  const [selectedValue, setSelectedValue] = useState("");
+  const [Brand, setBrand] = useState("");
+  const [ItemCode, setItemCode] = useState("");
+  const [ItemName, setItemName] = useState("");
+  const [CostPrice, setCostPrice] = useState("");
+  const [RetailPrice, setRetailPrice] = useState("");
+  const [Quantity, setQuantity] = useState("");
+  const [THreshHold, setTHreshHold] = useState("");
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Edit Item</Text>
       {/* <Image style={styles.image} source={require("../assets/edititem.png")} /> */}
       <View style={styles.form}>
-        <Picker style={styles.input} onLayout="Select Items">
+        <Picker
+          style={styles.input}
+          onLayout="Select Items"
+          onValueChange={(item) => setSelectedValue(item)}
+        >
           <Picker.Item label="-- Select Category--" value="" />
           <Picker.Item label="Pepsi" value="7 up" />
 
@@ -30,22 +81,58 @@ export default function EditItem() {
           <Picker.Item label="Slice Juice" value="juice" />
         </Picker>
 
-        <TextInput style={styles.input} placeholder="Brand" />
-        <TextInput style={styles.input} placeholder="Item Code" />
-        <TextInput style={styles.input} placeholder="Item Name" />
-        <TextInput style={styles.input} placeholder="Cost Price" />
-        <TextInput style={styles.input} placeholder="Retail Price" />
-        <TextInput style={styles.input} placeholder="Quantity" />
-        <TextInput style={styles.input} placeholder="THreshHold  Qty" />
+        <TextInput
+          style={styles.input}
+          placeholder="Brand"
+          onChangeText={(item) => setBrand(item)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Item Code"
+          onChangeText={(item) => setItemCode(item)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Item Name"
+          onChangeText={(item) => setItemName(item)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Cost Price"
+          onChangeText={(item) => setCostPrice(item)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Retail Price"
+          onChangeText={(item) => setRetailPrice(item)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Quantity"
+          onChangeText={(item) => setQuantity(item)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="THreshHold  Qty"
+          onChangeText={(item) => setTHreshHold(item)}
+        />
         <View style={styles.buttons}>
           <View style={styles.button}>
             <Button color="deepskyblue" title="Cancel" />
           </View>
           <View style={styles.button}>
-            <Button color="chartreuse" title="Save" />
+            <Button
+              color="chartreuse"
+              title="Save"
+              onPress={() => SaveItem()}
+            />
           </View>
           <View style={styles.button}>
-            <Button color="#4b0082" title="Update" />
+            <Button
+              color="#4b0082"
+              title="Update"
+              onPress={() => UpdateItem()}
+            />
           </View>
           {/* <View style={styles.button}>
             <Button color="#ff0000" title="Delete" />
