@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Alert, StyleSheet, FlatList } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { Alert, StyleSheet, FlatList, Platform } from 'react-native'
 import {
   Container,
   Form,
@@ -14,6 +14,7 @@ import {
   Right,
   Left,
 } from 'native-base'
+import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner'
 import { API_URL } from '../constants'
 import { useUser } from '../contexts/UserContext'
 
@@ -21,8 +22,20 @@ export default function PointOfSale({ navigation }) {
   const { user } = useUser()
   const [itemNo, setItemNo] = useState('')
   const [items, setItems] = useState([])
-
   const [itemSales, setItemSales] = useState(new Map())
+  const [scanMode, setScanMode] = useState(false)
+
+  useEffect(() => {
+    ;(async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync()
+      if (Platform.OS !== 'web') {
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!')
+          return
+        }
+      }
+    })()
+  }, [])
 
   function setQuantity(itemNo, price = 0, quantity = 0) {
     setItemSales(
@@ -70,7 +83,6 @@ export default function PointOfSale({ navigation }) {
     })
       .then((res) => res.json())
       .then(([item]) => {
-        console.log(item)
         itemSales.set(item.Item_No, { quantity: '0', total: '0' })
         setItems(items.concat([item]))
       })
@@ -79,13 +91,30 @@ export default function PointOfSale({ navigation }) {
       })
   }
 
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScanMode(false)
+    setItemNo(data)
+    searchItem()
+    // alert(`Bar code with type ${type} and data ${data} has been scanned!`)
+  }
+
   let total = 0
 
   itemSales.forEach((v) => {
     total += v.total
   })
 
-  return (
+  return scanMode ? (
+    <>
+      <BarCodeScanner
+        onBarCodeScanned={handleBarCodeScanned}
+        style={styles.absoluteFillObject}
+      />
+      <Button style={styles.input} full info onPress={() => setScanMode(false)}>
+        <Text>Back</Text>
+      </Button>
+    </>
+  ) : (
     <Container style={styles.container}>
       <Text style={{ marginBottom: 10 }}>{user.username}</Text>
       <Button style={styles.input} full info onPress={() => {}}>
@@ -103,7 +132,7 @@ export default function PointOfSale({ navigation }) {
             <Button transparent onPress={searchItem}>
               <Text>Search</Text>
             </Button>
-            <Button success onPress={() => {}}>
+            <Button success onPress={() => setScanMode(true)}>
               <Text>Scan</Text>
             </Button>
           </InputGroup>
@@ -197,5 +226,8 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 10,
+  },
+  absoluteFillObject: {
+    flex: 1,
   },
 })
