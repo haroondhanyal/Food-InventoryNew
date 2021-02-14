@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Alert, StyleSheet, ScrollView } from "react-native";
+import React, { useState } from 'react'
+import { Alert, StyleSheet, ScrollView } from 'react-native'
 import {
   Container,
   Form,
@@ -13,25 +13,25 @@ import {
   CardItem,
   Right,
   Left,
-} from "native-base";
-import { API_URL } from "../constants";
+} from 'native-base'
+import { API_URL } from '../constants'
 
 export default function ShowStock() {
-  const [searchItemNo, setSearchItemNo] = useState("");
-  const [itemNo, setItemNo] = useState("");
-  const [itemName, setItemName] = useState("");
-  const [category, setCategory] = useState("");
-  const [brand, setBrand] = useState("");
-  const [retailPrice, setRetailPrice] = useState("");
-  const [costPrice, setCostPrice] = useState("");
-  const [threshholdQuantity, setThreshholdQuantity] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [searchItemNo, setSearchItemNo] = useState('')
+  const [itemNo, setItemNo] = useState('')
+  const [itemName, setItemName] = useState('')
+  const [category, setCategory] = useState('')
+  const [brand, setBrand] = useState('')
+  const [retailPrice, setRetailPrice] = useState('')
+  const [costPrice, setCostPrice] = useState('')
+  const [threshholdQuantity, setThreshholdQuantity] = useState('')
+  const [quantity, setQuantity] = useState('')
 
   function searchItem() {
-    fetch(API_URL + "/items/searchitem", {
-      method: "POST",
+    fetch(API_URL + '/items/searchitem', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         itemno: searchItemNo,
@@ -39,18 +39,18 @@ export default function ShowStock() {
     })
       .then((res) => res.json())
       .then(([item]) => {
-        setItemNo(item.Item_No.toString());
-        setItemName(item.Item_Name);
-        setCategory(item.Category);
-        setBrand(item.Brand);
-        setRetailPrice(item.Retail_Price.toString());
-        setCostPrice(item.Cost_Price.toString());
-        setThreshholdQuantity(item.Threshhold_Quantity.toString());
-        setQuantity(item.Quantity.toString());
+        setItemNo(item.Item_No.toString())
+        setItemName(item.Item_Name)
+        setCategory(item.Category)
+        setBrand(item.Brand)
+        setRetailPrice(item.Retail_Price.toString())
+        setCostPrice(item.Cost_Price.toString())
+        setThreshholdQuantity(item.Threshhold_Quantity.toString())
+        setQuantity(item.Quantity.toString())
       })
       .catch((err) => {
-        Alert.alert("Item not found. Plase goto Add Item to add new item.");
-      });
+        Alert.alert('Item not found. Plase goto Add Item to add new item.')
+      })
   }
 
   return (
@@ -140,14 +140,13 @@ export default function ShowStock() {
         </Card>
       </ScrollView>
     </Container>
-  );
+  )
 }
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
     padding: 10,
   },
   input: {
     marginBottom: 10,
   },
-});
+})

@@ -16,8 +16,8 @@ import DatePicker from 'react-native-datepicker'
 import { API_URL } from '../constants'
 
 export default function StockReport() {
-  const [from, setFrom] = useState(new Date())
-  const [to, setTo] = useState(new Date())
+  const [from, setFrom] = useState()
+  const [to, setTo] = useState()
   const [itemNo, setItemNo] = useState('')
   const [items, setItems] = useState([])
 
@@ -108,7 +108,6 @@ export default function StockReport() {
 }
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
     padding: 10,
   },
   input: {

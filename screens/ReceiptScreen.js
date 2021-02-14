@@ -1,188 +1,101 @@
 import React from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Button,
-  ScrollView,
-} from 'react-native'
+import { StyleSheet, View, FlatList, Button, ScrollView } from 'react-native'
+import { Container, ListItem, Left, Body, Right, Text } from 'native-base'
 import { useRoute } from '@react-navigation/native'
-
-const products = [
-  {
-    name: 'Milk',
-    quantity: 5,
-    price: 725,
-  },
-  {
-    name: 'Ghee',
-    quantity: 5,
-    price: 990,
-  },
-  {
-    name: 'Milk',
-    quantity: 55,
-    price: 1000,
-  },
-  {
-    name: 'Milk',
-    quantity: 55,
-    price: 1000,
-  },
-  {
-    name: 'Milk',
-    quantity: 55,
-    price: 1000,
-  },
-  {
-    name: 'Milk',
-    quantity: 55,
-    price: 1000,
-  },
-]
+import { useUser } from '../contexts/UserContext'
 
 export default function ReceiptScreen() {
   const route = useRoute()
+  const { user } = useUser()
 
-  console.log(route.params)
+  const items = route.params.items || []
+  const total = route.params.total || 0
 
   return (
-    <ScrollView style={styles.container}>
-      <View>
-        <Text
-          style={{
-            fontSize: 24,
-            color: 'tomato',
-            textAlign: 'center',
-            marginBottom: 20,
-            fontWeight: 'bold',
-          }}
-        >
-          Sale Invoice
-        </Text>
-      </View>
-      <View
-        style={[
-          styles.tableRow,
-          { borderTopWidth: 2, borderBottomWidth: 2, backgroundColor: '#ccc' },
-        ]}
-      >
-        <View style={styles.tableRowCell}>
-          <Text>Item Name</Text>
-        </View>
-        <View style={[styles.tableRowCell, { marginLeft: 5 }]}>
-          <Text>Qty</Text>
-        </View>
-        <View style={styles.tableRowCell}>
-          <Text>Rate</Text>
-        </View>
-        <View style={styles.tableRowCell}>
-          <Text>Total</Text>
-        </View>
+    <Container style={styles.container}>
+      <View style={{ backgroundColor: '#f9f9f9' }}>
+        <ListItem noBorder>
+          <Left>
+            <Text>Receipt #:</Text>
+          </Left>
+          <Body>
+            <Text>1</Text>
+          </Body>
+        </ListItem>
+        <ListItem noBorder>
+          <Left>
+            <Text>Sale Person:</Text>
+          </Left>
+          <Body>
+            <Text>{user.username}</Text>
+          </Body>
+        </ListItem>
+        <ListItem noBorder>
+          <Left>
+            <Text>Date:</Text>
+          </Left>
+          <Body>
+            <Text>{new Date().toDateString()}</Text>
+          </Body>
+        </ListItem>
       </View>
       <FlatList
-        data={products}
-        keyExtractor={(i, index) => index}
-        renderItem={({ item }) => (
-          <View style={styles.tableRow}>
-            <View style={styles.tableRowCell}>
-              <Text>{item.name}</Text>
-            </View>
-            <View style={styles.tableRowCell}>
-              <Text>{item.quantity}</Text>
-            </View>
-            <View style={styles.tableRowCell}>
-              <Text>{item.price}</Text>
-            </View>
-            <View style={styles.tableRowCell}>
-              <Text>{item.quantity * item.price}</Text>
-            </View>
-          </View>
+        data={items}
+        keyExtractor={(i, index) => index.toString()}
+        ListHeaderComponent={() => (
+          <ListItem first>
+            <Left>
+              <Text style={{ marginRight: 20 }}>Sr.</Text>
+              <Text>Items</Text>
+            </Left>
+            <Body>
+              <Text>Quantity</Text>
+            </Body>
+            <Right>
+              <Text>Price</Text>
+            </Right>
+          </ListItem>
+        )}
+        renderItem={({ item, index }) => (
+          <ListItem>
+            <Left>
+              <Text style={{ marginRight: 20 }}>{index + 1}</Text>
+              <Text>{item.Item_Name}</Text>
+            </Left>
+            <Body>
+              <Text>{item.Quantity}</Text>
+            </Body>
+            <Right>
+              <Text>{item.Retail_Price}</Text>
+            </Right>
+          </ListItem>
+        )}
+        ListFooterComponent={() => (
+          <>
+            <ListItem last>
+              <Left>
+                <Text>TOTAL Rs.</Text>
+              </Left>
+              <Right>
+                <Text> {total}</Text>
+              </Right>
+            </ListItem>
+            <ListItem>
+              <Body>
+                <Text style={{ color: 'blue', textAlign: 'center' }}>
+                  Thankyou for shoping from us!
+                </Text>
+              </Body>
+            </ListItem>
+          </>
         )}
       />
-      <View>
-        <View style={styles.bottomItem}>
-          <Text>Payment mode:</Text>
-          <Text>Cash</Text>
-        </View>
-        <View style={styles.bottomItem}>
-          <Text>Invoice net total:</Text>
-          <Text>{products.reduce((t, i) => t + i.price * i.quantity, 0)}</Text>
-        </View>
-        <View
-          style={[
-            styles.bottomItem,
-            { borderBottomWidth: 2, paddingBottom: 5 },
-          ]}
-        >
-          <Text>Discount:</Text>
-          <Text>
-            5% ({products.reduce((t, i) => t + i.price * i.quantity, 0) * 0.05})
-          </Text>
-        </View>
-        <View style={styles.bottomItem}>
-          <Text>Total bill:</Text>
-          <Text>
-            {products.reduce((t, i) => t + i.price * i.quantity, 0) -
-              products.reduce((t, i) => t + i.price * i.quantity, 0) * 0.05}
-          </Text>
-        </View>
-        <View
-          style={[
-            styles.bottomItem,
-            { borderBottomWidth: 2, paddingBottom: 5 },
-          ]}
-        >
-          <Text>Cash paid:</Text>
-          <Text>{500000}</Text>
-        </View>
-        <View
-          style={[
-            styles.bottomItem,
-            { borderBottomWidth: 4, paddingBottom: 5 },
-          ]}
-        >
-          <Text>Customer balance:</Text>
-          <Text>
-            {500000 -
-              products.reduce((t, i) => t + i.price * i.quantity, 0) -
-              products.reduce((t, i) => t + i.price * i.quantity, 0) * 0.05}
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.button}>
-        <Button color="tomato" alignSelf="center" title="Pay" />
-      </View>
-    </ScrollView>
+    </Container>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
-    padding: 20,
-  },
-  tableRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    padding: 20,
-  },
-  tableRowCell: {
-    flex: 0.25,
-  },
-  bottomItem: {
-    marginTop: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
-    width: 200,
-    alignSelf: 'center',
-    marginTop: 30,
-    marginBottom: 50,
-    height: 50,
+    padding: 10,
   },
 })

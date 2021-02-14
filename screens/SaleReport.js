@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Alert, StyleSheet, FlatList } from "react-native";
+import React, { useState } from 'react'
+import { Alert, StyleSheet, FlatList } from 'react-native'
 import {
   Container,
   Form,
@@ -11,21 +11,21 @@ import {
   CardItem,
   Right,
   Left,
-} from "native-base";
-import DatePicker from "react-native-datepicker";
-import { API_URL } from "../constants";
+} from 'native-base'
+import DatePicker from 'react-native-datepicker'
+import { API_URL } from '../constants'
 
 export default function SaleReport() {
-  const [from, setFrom] = useState(new Date());
-  const [to, setTo] = useState(new Date());
-  const [itemNo, setItemNo] = useState("");
-  const [items, setItems] = useState([]);
+  const [from, setFrom] = useState()
+  const [to, setTo] = useState()
+  const [itemNo, setItemNo] = useState('')
+  const [items, setItems] = useState([])
 
   function gnerateStockReport() {
-    fetch(API_URL + "/report/salereportwithdate", {
-      method: "POST",
+    fetch(API_URL + '/report/salereportwithdate', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         itemno: itemNo,
@@ -35,25 +35,25 @@ export default function SaleReport() {
     })
       .then((res) => res.json())
       .then((items) => {
-        console.log(items);
-        setItems(items);
+        console.log(items)
+        setItems(items)
       })
       .catch((err) => {
-        Alert.alert(err.toString());
-      });
+        Alert.alert(err.toString())
+      })
   }
 
   return (
     <Container style={styles.container}>
       <Form>
         <DatePicker
-          style={[styles.input, { width: "100%" }]}
+          style={[styles.input, { width: '100%' }]}
           date={from}
           onDateChange={setFrom}
           placeholder="From"
         />
         <DatePicker
-          style={[styles.input, { width: "100%" }]}
+          style={[styles.input, { width: '100%' }]}
           date={to}
           onDateChange={setTo}
           placeholder="To"
@@ -104,14 +104,13 @@ export default function SaleReport() {
         )}
       />
     </Container>
-  );
+  )
 }
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
     padding: 10,
   },
   input: {
     marginBottom: 10,
   },
-});
+})

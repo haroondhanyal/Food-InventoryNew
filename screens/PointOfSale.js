@@ -114,20 +114,25 @@ export default function PointOfSale({ navigation }) {
     <>
       <BarCodeScanner
         onBarCodeScanned={handleBarCodeScanned}
-        style={styles.absoluteFillObject}
+        style={{ flex: 1 }}
       />
-      <Button style={styles.input} full info onPress={() => setScanMode(false)}>
+      <Button
+        style={{ marginBottom: 10 }}
+        full
+        info
+        onPress={() => setScanMode(false)}
+      >
         <Text>Back</Text>
       </Button>
     </>
   ) : (
     <Container style={styles.container}>
       <Text style={{ marginBottom: 10 }}>{user.username}</Text>
-      <Button style={styles.input} full info onPress={() => {}}>
+      <Button style={{ marginBottom: 10 }} full info onPress={() => {}}>
         <Text>Frequently Used Items</Text>
       </Button>
       <Form>
-        <Item style={styles.input} regular>
+        <Item style={{ marginBottom: 10 }} regular>
           <InputGroup>
             <Icon name="ios-search" />
             <Input
@@ -180,7 +185,7 @@ export default function PointOfSale({ navigation }) {
                 <Text>Quantity</Text>
               </Left>
               <Right>
-                <Item style={styles.input} regular>
+                <Item style={{ marginBottom: 10 }} regular>
                   <Icon
                     name="remove"
                     onPress={() =>
@@ -215,15 +220,15 @@ export default function PointOfSale({ navigation }) {
       />
 
       <Button
-        style={styles.input}
+        style={{ marginBottom: 10 }}
         full
         success
-        onPress={() => navigation.navigate('Receipt', { a: '3' })}
+        onPress={() => navigation.navigate('Receipt', { items, total })}
       >
         <Text>Pay</Text>
       </Button>
 
-      <Button style={styles.input} full danger onPress={cancelSale}>
+      <Button style={{ marginBottom: 10 }} full danger onPress={cancelSale}>
         <Text>Cancel</Text>
       </Button>
     </Container>
@@ -232,13 +237,6 @@ export default function PointOfSale({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
     padding: 10,
-  },
-  input: {
-    marginBottom: 10,
-  },
-  absoluteFillObject: {
-    flex: 1,
   },
 })

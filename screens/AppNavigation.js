@@ -22,9 +22,9 @@ import ShowStock from './ShowStock'
 import AddStock from './AddStock'
 import SaleReport from './SaleReport'
 import StockReport from './StockReport'
-import ReceiptScreen from './ReceiptScreen'
 import SalesPersonDashboard from './SalesPersonDashboard'
 import PointOfSale from './PointOfSale'
+import ReceiptScreen from './ReceiptScreen'
 
 const Drawer = createDrawerNavigator()
 const Stack = createStackNavigator()
@@ -43,7 +43,6 @@ function SalesManagerStack() {
       <Stack.Screen name="Add Stock" component={AddStock} />
       <Stack.Screen name="Sale Report" component={SaleReport} />
       <Stack.Screen name="Stock Report" component={StockReport} />
-      <Stack.Screen name="Receipt" component={ReceiptScreen} />
     </Stack.Navigator>
   )
 }
@@ -56,20 +55,20 @@ function SalesPersonStack() {
         component={SalesPersonDashboard}
       />
       <Stack.Screen name="Point Of Sale" component={PointOfSale} />
+      <Stack.Screen name="Receipt" component={ReceiptScreen} />
     </Stack.Navigator>
   )
 }
 
 export default function () {
   const { user, setUser } = useUser()
-
   function logout() {
     setUser(null)
   }
 
   return (
     <Drawer.Navigator
-      drawerContent={(props) => (
+      drawerContent={({ navigation, ...props }) => (
         <DrawerContentScrollView {...props}>
           <View style={styles.drawerContent}>
             <View style={styles.userInfoSection}>
@@ -82,6 +81,53 @@ export default function () {
               </View>
             </View>
           </View>
+          {user.role === 'SalesManager' ? (
+            <>
+              <DrawerItem
+                icon={(props) => <MaterialIcons {...props} name="people-alt" />}
+                label="Daily Record"
+                onPress={() => navigation.navigate('Daily Record')}
+              />
+              <DrawerItem
+                icon={(props) => <MaterialIcons {...props} name="add" />}
+                label="Add Item"
+                onPress={() => navigation.navigate('Add Item')}
+              />
+              <DrawerItem
+                icon={(props) => <MaterialIcons {...props} name="add" />}
+                label="Edit Item"
+                onPress={() => navigation.navigate('Edit Item')}
+              />
+              <DrawerItem
+                icon={(props) => <MaterialIcons {...props} name="add" />}
+                label="Show Stock"
+                onPress={() => navigation.navigate('Show Stock')}
+              />
+              <DrawerItem
+                icon={(props) => <MaterialIcons {...props} name="add" />}
+                label="Add Stock"
+                onPress={() => navigation.navigate('Add Stock')}
+              />
+              <DrawerItem
+                icon={(props) => <MaterialIcons {...props} name="add" />}
+                label="Sale Report"
+                onPress={() => navigation.navigate('Sale Report')}
+              />
+              <DrawerItem
+                icon={(props) => <MaterialIcons {...props} name="add" />}
+                label="Stock Report"
+                onPress={() => navigation.navigate('Stock Report')}
+              />
+            </>
+          ) : (
+            <>
+              <DrawerItem
+                icon={(props) => <MaterialIcons {...props} name="add" />}
+                label="Point Of Sale"
+                onPress={() => navigation.navigate('Point Of Sale')}
+              />
+            </>
+          )}
           <DrawerItemList {...props} />
           <DrawerItem
             icon={(props) => <MaterialIcons {...props} name="logout" />}
@@ -92,94 +138,25 @@ export default function () {
       )}
     >
       {user.role === 'SalesManager' ? (
-        <>
-          <Drawer.Screen
-            options={{
-              drawerIcon: (props) => (
-                <MaterialIcons {...props} name="dashboard" />
-              ),
-            }}
-            name="Sales Manager Dashboard"
-            component={SalesManagerDashboard}
-          />
-          <Drawer.Screen
-            options={{
-              drawerIcon: (props) => (
-                <MaterialIcons {...props} name="people-alt" />
-              ),
-            }}
-            name="Daily Record"
-            component={DailyRecord}
-          />
-          <Drawer.Screen
-            options={{
-              drawerIcon: (props) => <MaterialIcons {...props} name="add" />,
-            }}
-            name="Add Item"
-            component={AddItem}
-          />
-          <Drawer.Screen
-            options={{
-              drawerIcon: (props) => <MaterialIcons {...props} name="edit" />,
-            }}
-            name="Edit Item"
-            component={EditItem}
-          />
-          <Drawer.Screen
-            options={{
-              drawerIcon: (props) => (
-                <MaterialIcons {...props} name="add-shopping-cart" />
-              ),
-            }}
-            name="Show Stock"
-            component={ShowStock}
-          />
-          <Drawer.Screen
-            options={{
-              drawerIcon: (props) => <MaterialIcons {...props} name="add" />,
-            }}
-            name="Add Stock"
-            component={AddStock}
-          />
-          <Drawer.Screen
-            options={{
-              drawerIcon: (props) => (
-                <FontAwesome {...props} name="bar-chart" />
-              ),
-            }}
-            name="Sale Report"
-            component={SaleReport}
-          />
-
-          <Drawer.Screen
-            options={{
-              drawerIcon: (props) => (
-                <MaterialCommunityIcons {...props} name="chart-bar" />
-              ),
-            }}
-            name="Stock Report"
-            component={StockReport}
-          />
-        </>
+        <Drawer.Screen
+          name="Sales Manager Dashboard"
+          component={SalesManagerStack}
+          options={{
+            drawerIcon: (props) => (
+              <MaterialIcons {...props} name="dashboard" />
+            ),
+          }}
+        />
       ) : (
-        <>
-          <Drawer.Screen
-            options={{
-              drawerIcon: (props) => (
-                <MaterialIcons {...props} name="dashboard" />
-              ),
-            }}
-            name="Sales Person Dashboard"
-            component={SalesPersonDashboard}
-          />
-          <Drawer.Screen
-            options={{
-              drawerIcon: (props) => <MaterialIcons {...props} name="add" />,
-            }}
-            name="Point Of Sale"
-            component={PointOfSale}
-          />
-        </>
+        <Drawer.Screen
+          name="Sales Person Dashboard"
+          component={SalesPersonStack}
+          options={{
+            drawerIcon: (props) => (
+              <MaterialIcons {...props} name="dashboard" />
+            ),
+          }}
+        />
       )}
     </Drawer.Navigator>
   )

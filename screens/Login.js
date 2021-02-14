@@ -6,8 +6,8 @@ import { API_URL } from '../constants'
 export default function Login() {
   const { setUser } = useUser()
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('kazmi')
+  const [password, setPassword] = useState('54321')
 
   function loginAction() {
     fetch(API_URL + '/login/userlogin', {
