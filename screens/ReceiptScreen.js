@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   StyleSheet,
   Text,
@@ -6,52 +6,57 @@ import {
   FlatList,
   Button,
   ScrollView,
-} from "react-native";
+} from 'react-native'
+import { useRoute } from '@react-navigation/native'
 
 const products = [
   {
-    name: "Milk",
+    name: 'Milk',
     quantity: 5,
     price: 725,
   },
   {
-    name: "Ghee",
+    name: 'Ghee',
     quantity: 5,
     price: 990,
   },
   {
-    name: "Milk",
+    name: 'Milk',
     quantity: 55,
     price: 1000,
   },
   {
-    name: "Milk",
+    name: 'Milk',
     quantity: 55,
     price: 1000,
   },
   {
-    name: "Milk",
+    name: 'Milk',
     quantity: 55,
     price: 1000,
   },
   {
-    name: "Milk",
+    name: 'Milk',
     quantity: 55,
     price: 1000,
   },
-];
+]
 
 export default function ReceiptScreen() {
+  const route = useRoute()
+
+  console.log(route.params)
+
   return (
     <ScrollView style={styles.container}>
       <View>
         <Text
           style={{
             fontSize: 24,
-            color: "tomato",
-            textAlign: "center",
+            color: 'tomato',
+            textAlign: 'center',
             marginBottom: 20,
-            fontWeight: "bold",
+            fontWeight: 'bold',
           }}
         >
           Sale Invoice
@@ -60,7 +65,7 @@ export default function ReceiptScreen() {
       <View
         style={[
           styles.tableRow,
-          { borderTopWidth: 2, borderBottomWidth: 2, backgroundColor: "#ccc" },
+          { borderTopWidth: 2, borderBottomWidth: 2, backgroundColor: '#ccc' },
         ]}
       >
         <View style={styles.tableRowCell}>
@@ -151,7 +156,7 @@ export default function ReceiptScreen() {
         <Button color="tomato" alignSelf="center" title="Pay" />
       </View>
     </ScrollView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -160,8 +165,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   tableRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     borderBottomWidth: 1,
     padding: 20,
   },
@@ -170,14 +175,14 @@ const styles = StyleSheet.create({
   },
   bottomItem: {
     marginTop: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   button: {
     width: 200,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginTop: 30,
     marginBottom: 50,
     height: 50,
   },
-});
+})
