@@ -14,7 +14,7 @@ export default function SalesManagerDashboard({ navigation }) {
         </Item>
       </Form>
       <View style={styles.row}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.block}
           onPress={() => navigation.navigate("Add Item")}
         >
@@ -23,7 +23,7 @@ export default function SalesManagerDashboard({ navigation }) {
             source={require("../assets/addstock.png")}
           />
           <Text>Add Item</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           style={styles.block}
           onPress={() => navigation.navigate("Add Stock")}

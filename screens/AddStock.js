@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Alert, StyleSheet, ScrollView } from 'react-native'
+import React, { useState } from "react";
+import { Alert, StyleSheet, ScrollView } from "react-native";
 import {
   Container,
   Form,
@@ -11,48 +11,54 @@ import {
   Icon,
   Separator,
   InputGroup,
-} from 'native-base'
-import { API_URL } from '../constants'
+} from "native-base";
+import { API_URL } from "../constants";
 
 export default function AddStock() {
-  const [itemNo, setItemNo] = useState('')
-  const [itemName, setItemName] = useState('')
-  const [quantity, setQuantity] = useState('')
+  const [itemNo, setItemNo] = useState("");
+  const [itemName, setItemName] = useState("");
+  const [quantity, setQuantity] = useState("");
 
   function decreaseQuantity() {
-    setQuantity(Math.abs(parseInt(quantity) - 1).toString())
+    setQuantity(Math.abs(parseInt(quantity) - 1).toString());
   }
 
   function increaseQuantity() {
-    setQuantity((parseInt(quantity) + 1).toString())
+    setQuantity((parseInt(quantity) + 1).toString());
   }
 
   function searchItem() {
-    fetch(API_URL + '/items/searchitem?itemno=' + itemNo, {
-      method: 'GET',
+    fetch(API_URL + "/items/searchitem", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        itemno: itemNo,
+      }),
     })
       .then((res) => res.json())
       .then(([item]) => {
-        console.log(item)
+        console.log(item);
 
-        setItemName(item.Item_Name)
-        setQuantity(item.Quantity.toString())
+        setItemName(item.Item_Name);
+        setQuantity(item.Quantity.toString());
       })
       .catch((err) => {
-        Alert.alert('Item not found. Plase goto Add Item to add new item.')
-      })
+        Alert.alert("Item not found. Plase goto Add Item to add new item.");
+      });
   }
 
   function addStock() {
     if (!itemNo || !quantity) {
-      Alert.alert('Please fill inputs first.')
-      return
+      Alert.alert("Please fill inputs first.");
+      return;
     }
 
-    fetch(API_URL + '/stock/addstock', {
-      method: 'POST',
+    fetch(API_URL + "/stock/addstock", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         Item_No: itemNo,
@@ -60,14 +66,14 @@ export default function AddStock() {
       }),
     })
       .then((res) => {
-        Alert.alert('Stock has been successfully added.')
-        setItemNo('')
-        setItemName('')
-        setQuantity('')
+        Alert.alert("Stock has been successfully added.");
+        setItemNo("");
+        setItemName("");
+        setQuantity("");
       })
       .catch((err) => {
-        Alert.alert(err.toString())
-      })
+        Alert.alert(err.toString());
+      });
   }
 
   return (
@@ -111,7 +117,7 @@ export default function AddStock() {
         </Button>
       </ScrollView>
     </Container>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -122,4 +128,4 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 10,
   },
-})
+});

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Alert, StyleSheet, FlatList } from 'react-native'
+import React, { useState } from "react";
+import { Alert, StyleSheet, FlatList } from "react-native";
 import {
   Container,
   Form,
@@ -7,46 +7,53 @@ import {
   Input,
   Button,
   Text,
-  InputGroup,
-  Icon,
   Card,
   CardItem,
   Right,
   Left,
-} from 'native-base'
-import DatePicker from 'react-native-datepicker'
-import { API_URL } from '../constants'
+} from "native-base";
+import DatePicker from "react-native-datepicker";
+import { API_URL } from "../constants";
 
 export default function StockReport() {
-  const [from, setFrom] = useState(new Date())
-  const [to, setTo] = useState(new Date())
-  const [itemNo, setItemNo] = useState('')
-  const [items, setItems] = useState([])
+  const [from, setFrom] = useState(new Date());
+  const [to, setTo] = useState(new Date());
+  const [itemNo, setItemNo] = useState("");
+  const [items, setItems] = useState([]);
 
   function gnerateStockReport() {
-    fetch(API_URL + '/stock/allstockhistory', {
-      method: 'GET',
+    fetch(API_URL + "/report/stockreportwithdate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        itemno: itemNo,
+        startdate: new Date(from),
+        enddate: new Date(to),
+      }),
     })
       .then((res) => res.json())
       .then((items) => {
-        setItems(items.filter((item) => item.Item_No == itemNo))
+        console.log(items);
+        setItems(items);
       })
       .catch((err) => {
-        Alert.alert(err.toString())
-      })
+        Alert.alert(err.toString());
+      });
   }
 
   return (
     <Container style={styles.container}>
       <Form>
         <DatePicker
-          style={[styles.input, { width: '100%' }]}
+          style={[styles.input, { width: "100%" }]}
           date={from}
           onDateChange={setFrom}
           placeholder="From"
         />
         <DatePicker
-          style={[styles.input, { width: '100%' }]}
+          style={[styles.input, { width: "100%" }]}
           date={to}
           onDateChange={setTo}
           placeholder="To"
@@ -74,15 +81,7 @@ export default function StockReport() {
                 <Text>Date</Text>
               </Left>
               <Right>
-                <Text>{new Date(item.Stock_Date).toDateString()}</Text>
-              </Right>
-            </CardItem>
-            <CardItem>
-              <Left>
-                <Text>Item Name</Text>
-              </Left>
-              <Right>
-                <Text>{item.Item_Name}</Text>
+                <Text>{new Date(item.Date).toDateString()}</Text>
               </Right>
             </CardItem>
             <CardItem>
@@ -90,7 +89,7 @@ export default function StockReport() {
                 <Text>Item No</Text>
               </Left>
               <Right>
-                <Text>{item.Item_No}</Text>
+                <Text>{itemNo}</Text>
               </Right>
             </CardItem>
             <CardItem>
@@ -105,7 +104,7 @@ export default function StockReport() {
         )}
       />
     </Container>
-  )
+  );
 }
 const styles = StyleSheet.create({
   container: {
@@ -115,4 +114,4 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 10,
   },
-})
+});
