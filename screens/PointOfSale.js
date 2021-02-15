@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Alert, StyleSheet, FlatList, Platform } from 'react-native'
+import React, { useState, useEffect } from "react";
+import { Alert, StyleSheet, FlatList, Platform } from "react-native";
 import {
   Container,
   Form,
@@ -13,29 +13,29 @@ import {
   CardItem,
   Right,
   Left,
-} from 'native-base'
-import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner'
-import { API_URL } from '../constants'
-import { useUser } from '../contexts/UserContext'
+} from "native-base";
+import { BarCodeScanner, BarCodeScannerResult } from "expo-barcode-scanner";
+import { API_URL } from "../constants";
+import { useUser } from "../contexts/UserContext";
 
 export default function PointOfSale({ navigation }) {
-  const { user } = useUser()
-  const [itemNo, setItemNo] = useState('')
-  const [items, setItems] = useState([])
-  const [itemSales, setItemSales] = useState(new Map())
-  const [scanMode, setScanMode] = useState(false)
+  const { user } = useUser();
+  const [itemNo, setItemNo] = useState("");
+  const [items, setItems] = useState([]);
+  const [itemSales, setItemSales] = useState(new Map());
+  const [scanMode, setScanMode] = useState(false);
 
   useEffect(() => {
-    ;(async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync()
-      if (Platform.OS !== 'web') {
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!')
-          return
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      if (Platform.OS !== "web") {
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+          return;
         }
       }
-    })()
-  }, [])
+    })();
+  }, []);
 
   function setQuantity(itemNo, price = 0, quantity = 0) {
     setItemSales(
@@ -45,11 +45,11 @@ export default function PointOfSale({ navigation }) {
           total: quantity * price,
         })
       )
-    )
+    );
   }
 
   function increaseQuantity(itemNo, price) {
-    const quantity = parseInt(itemSales.get(itemNo).quantity) + 1
+    const quantity = parseInt(itemSales.get(itemNo).quantity) + 1;
     setItemSales(
       new Map(
         itemSales.set(itemNo, {
@@ -57,11 +57,11 @@ export default function PointOfSale({ navigation }) {
           total: quantity * price,
         })
       )
-    )
+    );
   }
 
   function decreaseQuantity(itemNo, price) {
-    const quantity = parseInt(itemSales.get(itemNo).quantity) - 1
+    const quantity = parseInt(itemSales.get(itemNo).quantity) - 1;
     setItemSales(
       new Map(
         itemSales.set(itemNo, {
@@ -69,19 +69,19 @@ export default function PointOfSale({ navigation }) {
           total: quantity * price,
         })
       )
-    )
+    );
   }
 
   function cancelSale() {
-    setItems([])
-    setItemSales(new Map())
+    setItems([]);
+    setItemSales(new Map());
   }
 
   function searchItem() {
-    fetch(API_URL + '/items/searchitem', {
-      method: 'POST',
+    fetch(API_URL + "/items/searchitem", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         itemno: itemNo,
@@ -89,26 +89,26 @@ export default function PointOfSale({ navigation }) {
     })
       .then((res) => res.json())
       .then(([item]) => {
-        itemSales.set(item.Item_No, { quantity: '0', total: '0' })
-        setItems(items.concat([item]))
+        itemSales.set(item.Item_No, { quantity: "0", total: "0" });
+        setItems(items.concat([item]));
       })
       .catch((err) => {
-        Alert.alert('Item not found. Plase goto Add Item to add new item.')
-      })
+        Alert.alert("Item not found. Plase goto Add Item to add new item.");
+      });
   }
 
   const handleBarCodeScanned = ({ type, data }) => {
-    setScanMode(false)
-    setItemNo(data)
-    searchItem()
+    setScanMode(false);
+    setItemNo(data);
+    searchItem();
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`)
-  }
+  };
 
-  let total = 0
+  let total = 0;
 
   itemSales.forEach((v) => {
-    total += v.total
-  })
+    total += v.total;
+  });
 
   return scanMode ? (
     <>
@@ -223,7 +223,7 @@ export default function PointOfSale({ navigation }) {
         style={{ marginBottom: 10 }}
         full
         success
-        onPress={() => navigation.navigate('Receipt', { items, total })}
+        onPress={() => navigation.navigate("Receipt", { items, total })}
       >
         <Text>Pay</Text>
       </Button>
@@ -232,11 +232,11 @@ export default function PointOfSale({ navigation }) {
         <Text>Cancel</Text>
       </Button>
     </Container>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     padding: 10,
   },
-})
+});

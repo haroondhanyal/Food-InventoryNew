@@ -1,33 +1,33 @@
-import React from 'react'
-import { StyleSheet, View, Text } from 'react-native'
-import { Thumbnail } from 'native-base'
+import React from "react";
+import { StyleSheet, View, Text } from "react-native";
+import { Thumbnail } from "native-base";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
   DrawerItemList,
-} from '@react-navigation/drawer'
-import { createStackNavigator } from '@react-navigation/stack'
+} from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
 import {
   FontAwesome,
   MaterialCommunityIcons,
   MaterialIcons,
-} from '@expo/vector-icons'
-import { useUser } from '../contexts/UserContext'
-import SalesManagerDashboard from './SalesManagerDashboard'
-import DailyRecord from './DailyRecord'
-import AddItem from './AddItem'
-import EditItem from './EditItem'
-import ShowStock from './ShowStock'
-import AddStock from './AddStock'
-import SaleReport from './SaleReport'
-import StockReport from './StockReport'
-import SalesPersonDashboard from './SalesPersonDashboard'
-import PointOfSale from './PointOfSale'
-import ReceiptScreen from './ReceiptScreen'
+} from "@expo/vector-icons";
+import { useUser } from "../contexts/UserContext";
+import SalesManagerDashboard from "./SalesManagerDashboard";
+import DailyRecord from "./DailyRecord";
+import AddItem from "./AddItem";
+import EditItem from "./EditItem";
+import ShowStock from "./ShowStock";
+import AddStock from "./AddStock";
+import SaleReport from "./SaleReport";
+import StockReport from "./StockReport";
+import SalesPersonDashboard from "./SalesPersonDashboard";
+import PointOfSale from "./PointOfSale";
+import ReceiptScreen from "./ReceiptScreen";
 
-const Drawer = createDrawerNavigator()
-const Stack = createStackNavigator()
+const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 function SalesManagerStack() {
   return (
@@ -44,7 +44,7 @@ function SalesManagerStack() {
       <Stack.Screen name="Sale Report" component={SaleReport} />
       <Stack.Screen name="Stock Report" component={StockReport} />
     </Stack.Navigator>
-  )
+  );
 }
 
 function SalesPersonStack() {
@@ -57,13 +57,13 @@ function SalesPersonStack() {
       <Stack.Screen name="Point Of Sale" component={PointOfSale} />
       <Stack.Screen name="Receipt" component={ReceiptScreen} />
     </Stack.Navigator>
-  )
+  );
 }
 
 export default function () {
-  const { user, setUser } = useUser()
+  const { user, setUser } = useUser();
   function logout() {
-    setUser(null)
+    setUser(null);
   }
 
   return (
@@ -72,60 +72,64 @@ export default function () {
         <DrawerContentScrollView {...props}>
           <View style={styles.drawerContent}>
             <View style={styles.userInfoSection}>
-              <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                <Thumbnail source={require('../assets/login.png')} size={50} />
-                <View style={{ marginLeft: 15, flexDirection: 'column' }}>
+              <View style={{ flexDirection: "row", marginTop: 15 }}>
+                <Thumbnail source={require("../assets/login.png")} size={50} />
+                <View style={{ marginLeft: 15, flexDirection: "column" }}>
                   <Text style={styles.title}>{user.username}</Text>
                   <Text style={styles.caption}>{user.role}</Text>
                 </View>
               </View>
             </View>
           </View>
-          {user.role === 'SalesManager' ? (
+          {user.role === "SalesManager" ? (
             <>
               <DrawerItem
                 icon={(props) => <MaterialIcons {...props} name="people-alt" />}
                 label="Daily Record"
-                onPress={() => navigation.navigate('Daily Record')}
+                onPress={() => navigation.navigate("Daily Record")}
               />
               <DrawerItem
                 icon={(props) => <MaterialIcons {...props} name="add" />}
                 label="Add Item"
-                onPress={() => navigation.navigate('Add Item')}
+                onPress={() => navigation.navigate("Add Item")}
               />
               <DrawerItem
-                icon={(props) => <MaterialIcons {...props} name="add" />}
+                icon={(props) => <MaterialIcons {...props} name="edit" />}
                 label="Edit Item"
-                onPress={() => navigation.navigate('Edit Item')}
+                onPress={() => navigation.navigate("Edit Item")}
               />
               <DrawerItem
-                icon={(props) => <MaterialIcons {...props} name="add" />}
+                icon={(props) => (
+                  <MaterialIcons {...props} name="add-shopping-cart" />
+                )}
                 label="Show Stock"
-                onPress={() => navigation.navigate('Show Stock')}
+                onPress={() => navigation.navigate("Show Stock")}
               />
               <DrawerItem
                 icon={(props) => <MaterialIcons {...props} name="add" />}
                 label="Add Stock"
-                onPress={() => navigation.navigate('Add Stock')}
+                onPress={() => navigation.navigate("Add Stock")}
               />
               <DrawerItem
-                icon={(props) => <MaterialIcons {...props} name="add" />}
+                icon={(props) => <FontAwesome {...props} name="bar-chart" />}
                 label="Sale Report"
-                onPress={() => navigation.navigate('Sale Report')}
+                onPress={() => navigation.navigate("Sale Report")}
               />
               <DrawerItem
-                icon={(props) => <MaterialIcons {...props} name="add" />}
+                icon={(props) => (
+                  <MaterialCommunityIcons {...props} name="chart-bar" />
+                )}
                 label="Stock Report"
-                onPress={() => navigation.navigate('Stock Report')}
+                onPress={() => navigation.navigate("Stock Report")}
               />
             </>
           ) : (
             <>
-              <DrawerItem
+              {/* <DrawerItem
                 icon={(props) => <MaterialIcons {...props} name="add" />}
                 label="Point Of Sale"
-                onPress={() => navigation.navigate('Point Of Sale')}
-              />
+                onPress={() => navigation.navigate("Point Of Sale")}
+              /> */}
             </>
           )}
           <DrawerItemList {...props} />
@@ -137,7 +141,7 @@ export default function () {
         </DrawerContentScrollView>
       )}
     >
-      {user.role === 'SalesManager' ? (
+      {user.role === "SalesManager" ? (
         <Drawer.Screen
           name="Sales Manager Dashboard"
           component={SalesManagerStack}
@@ -159,7 +163,7 @@ export default function () {
         />
       )}
     </Drawer.Navigator>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -172,10 +176,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     marginTop: 3,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   caption: {
     fontSize: 14,
     lineHeight: 14,
   },
-})
+});
